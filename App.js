@@ -88,16 +88,35 @@ export default class App extends Component {
     {
       keyword = (
         <View style={{ flex: 5, alignItems: 'center', justifyContent: 'center' }}>
-        <CheckBox
-          title='Find Locations near me'
-          checked={this.state.checkboxNear2}
-          onPress={() => this.setState({checkboxNear2: !this.state.checkboxNear2})}
+        <TextInput
+          placeholder="    Keyword"
+          style={{ width:100,height: 30, borderColor: 'gray', borderWidth: 1 }}
+          onChangeText={text => (this.setState({value2:text}))}
+          value2={this.state.value2}
         />
-        <CheckBox
-          title='Find Recipes'
-          checked={this.state.checkboxRecipes2}
-          onPress={() => this.setState({checkboxRecipes2: !this.state.checkboxRecipes2})}
+        <Button containerStyle={{marginTop: 3}}//https://react-native-elements.github.io/react-native-elements/docs/button.html
+      icon={
+        <Icon
+          name="car"
+          size={15}
+          color="white"
         />
+      }
+        title="Locations"
+        color="white"
+        onPress={() => Alert.alert('Locations button pressed')}
+      />
+      <Button containerStyle={{marginTop: 3}}
+        icon={
+          <Icon
+            name="book"
+            size={15}
+            color="white"
+          />
+        }
+        title="  Recipes"
+        onPress={() => Alert.alert('Recipes button pressed')}
+      />
         </View>
       );
     }
