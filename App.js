@@ -89,8 +89,8 @@ export default class App extends Component {
       keyword = (
         <View style={{ flex: 5, alignItems: 'center', justifyContent: 'center' }}>
         <TextInput
-          placeholder="    Keyword"
-          style={{ width:100,height: 30, borderColor: 'gray', borderWidth: 1 }}
+          placeholder="Keyword"
+          style={{ width:300,height: 30, borderColor: 'gray', borderWidth: 1 }}
           onChangeText={text => (this.setState({value2:text}))}
           value2={this.state.value2}
         />
@@ -104,7 +104,16 @@ export default class App extends Component {
       }
         title="Locations"
         color="white"
-        onPress={() => Alert.alert('Locations button pressed')}
+        onPress={() => {
+          axios.post(BASE_URL+'/name/place', {place: this.state.value2}).then((response) => {
+              this.setState({placeResults: response.data, recipeResults: []})
+          }).catch(function(error){
+            if(error !== null) {
+              console.log(error);
+            }
+      
+          })
+        }}
       />
       <Button containerStyle={{marginTop: 3}}
         icon={
@@ -114,8 +123,17 @@ export default class App extends Component {
             color="white"
           />
         }
-        title="  Recipes"
-        onPress={() => Alert.alert('Recipes button pressed')}
+        title="Recipes"
+        onPress={() => {
+          axios.post(BASE_URL+'/name/recipe', {recipe: this.state.value2}).then((response) => {
+              this.setState({recipeResults: response.data, placeResults: []})
+          }).catch(function(error){
+            if(error !== null) {
+              console.log(error);
+            }
+      
+          })
+        }}
       />
         </View>
       );
@@ -126,8 +144,8 @@ export default class App extends Component {
       ingToRep = (
         <View style={{ flex: 5, alignItems: 'center', justifyContent: 'center' }}>
         <TextInput
-          placeholder="    Ingredients"
-          style={{ width:100,height: 30, borderColor: 'gray', borderWidth: 1 }}
+          placeholder="Ingredients"
+          style={{ width:300,height: 30, borderColor: 'gray', borderWidth: 1 }}
           onChangeText={text => (this.setState({value:text}))}
           value={this.state.value}
         />
@@ -139,8 +157,17 @@ export default class App extends Component {
               color="white"
             />
           }
-          title="  Find Recipes"
-          onPress={() => this.setState({array1:this.state.value.split(',')})}
+          title="Find Recipes"
+          onPress={() => {
+            axios.post(BASE_URL+'/ingredients', {ingredients: this.state.value.replace(/, /g, "+")}).then((response) => {
+                this.setState({recipeResults: response.data, placeResults: []})
+            }).catch(function(error){
+              if(error !== null) {
+                console.log(error);
+              }
+        
+            })
+          }}
         />
         </View>
       );
@@ -184,10 +211,11 @@ export default class App extends Component {
           {
             (this.state.recipeResults.map((recipe, key) => {
               return (
-                <View key={key}>
-                  <Text>{recipe[1]}</Text>
-                  <Image source={{ uri: recipe[2] }} style={{ width: 100, height: 100 }} />
-                  <Text>{recipe[3]}</Text>
+                <View key={key} style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <Text style={{fontSize: 22}}>{recipe[1]}</Text>
+                  <Image source={{ uri: recipe[2] }} style={{ width: 200, height: 200 }} />
+                  <Text style={{fontSize: 16}}>{recipe[3]}</Text>
+                  <View style={{height: 1, backgroundColor: "black"}}></View>
                 </View>
               )
             }))
